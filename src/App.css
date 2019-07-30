@@ -23,18 +23,30 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1.5rem;
 }
 
 .timer div {
-    padding: 1rem 2rem;
+    padding: 1rem 4rem;
 }
 
 .controls {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 1.5rem;
 }
 
 .controls div {
     padding: 1rem 2rem;
+}
+
+.controls i {
+    font-size: 2rem;
+    padding: 1rem;
+}
+
+.clock {
+    font-size: 2rem;
+    font-weight: 500;
 }

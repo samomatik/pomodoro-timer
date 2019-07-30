@@ -17,7 +17,7 @@ class Timer extends React.Component {
 
                 <div className="clock">
                     <p id="timer-label">Session</p>
-                    <p id="time-left"></p>
+                    <p id="time-left">{this.props.timeRemaining}</p>
                 </div>
 
                 <div className="controls">
@@ -25,6 +25,10 @@ class Timer extends React.Component {
                         <button onClick={this.props.handleClick}><i id="break-increment" className="fa fa-arrow-circle-o-up"></i></button>
                         <p>Break</p>
                         <button onClick={this.props.handleClick}><i id="break-decrement" className="fa fa-arrow-circle-o-down"></i></button>
+                    </div>
+                    <div className="timer-controls">
+                        <button onClick={this.props.handleTimer}><i id="start_stop" className="fa fa-play-circle-o"></i></button>
+                        <button onClick={this.props.handleTimer}><i id="reset" className="fa fa-repeat"></i></button>
                     </div>
                     <div className="session-controls">
                         <button onClick={this.props.handleClick}><i id="session-increment" className="fa fa-arrow-circle-o-up"></i></button>
