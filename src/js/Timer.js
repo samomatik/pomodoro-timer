@@ -11,13 +11,13 @@ class Timer extends React.Component {
                     </div>
                     <div>
                         <p id="session-label">Session Length</p>
-                        <p id="session-length" onChange={this.props.setTimer}>{this.props.sessionLength}</p>
+                        <p id="session-length">{this.props.sessionLength}</p>
                     </div>
                 </div>
 
                 <div className="clock">
                     <p id="timer-label">{this.props.sessionType}</p>
-                    <p id="time-left">{this.props.timerTime}</p>
+                    <p id="time-left">{this.props.timeRemaining}</p>
                 </div>
 
                 <div className="controls">

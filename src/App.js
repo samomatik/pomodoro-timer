@@ -10,10 +10,9 @@ class App extends React.Component {
       breakLength: 5,
       sessionLength: 25,
       sessionType: 'Work',
-      timeRemaining: '00:00',
-      timerOn: false,
-      timerTime: 0,
-      timerStart: 0
+      timeRemaining: '25:00',
+      timerId: 25,
+      timerOn: false
     }
 
     this.handleClick = this.handleClick.bind(this);
@@ -21,12 +20,6 @@ class App extends React.Component {
     this.startTimer = this.startTimer.bind(this);
     this.stopTimer = this.stopTimer.bind(this);
     this.resetTimer = this.resetTimer.bind(this);
-    this.setTimer = this.setTimer.bind(this);
-  }
-
-  setTimer(val) {
-    let milliseconds = val * 60000;
-    return milliseconds;
   }
 
   handleClick(event) {
@@ -37,17 +30,15 @@ class App extends React.Component {
         }));
       case 'break-increment':
         return this.setState(state => ({
-          breakLength: state.breakLength > 60 ? state.breakLength : state.breakLength + 1
+          breakLength: state.breakLength >= 60 ? state.breakLength : state.breakLength + 1
         }));
       case 'session-decrement':
         return this.setState(state => ({
-          sessionLength: state.sessionLength <= 1 ? state.sessionLength : state.sessionLength - 1,
-          timerTime: this.setTimer(state.sessionLength - 1)
+          sessionLength: state.sessionLength <= 1 ? state.sessionLength : state.sessionLength - 1
         }));
       case 'session-increment':
         return this.setState(state => ({
-          sessionLength: state.sessionLength >= 60 ? state.sessionLength : state.sessionLength + 1,
-          timerTime: this.setTimer(state.sessionLength + 1)
+          sessionLength: state.sessionLength >= 60 ? state.sessionLength : state.sessionLength + 1
         }));
       default:
         return;
@@ -57,8 +48,7 @@ class App extends React.Component {
   handleTimer(event) {
     console.log(event.target);
     if (event.target.id === 'start_stop' && !this.state.timerOn) {
-      this.setTimer(this.state.sessionLength);
-      this.startTimer();
+      this.startTimer(this.state.sessionLength);
     }
     else if (event.target.id === 'start_stop' && this.state.timerOn) {
       this.stopTimer();
@@ -68,31 +58,48 @@ class App extends React.Component {
     }
   }
 
-  startTimer = () => {
+  startTimer = (duration) => {
     this.setState({
       timerOn: true,
-      timerTime: this.state.timerTime,
-      timerStart: this.state.timerTime
     });
-    this.timer = setInterval(() => {
-      const newTime = this.state.timerTime - 10;
-      if (newTime >= 0) {
-        this.setState({
-          timerTime: newTime
-        });
-      } else {
-        clearInterval(this.timer);
-        this.setState({ 
-          timerOn: false,
-          sessionType: 'Break'
-        });
-        console.log("Take a break!");
+    let time = duration * 60;
+    let minutes;
+    let seconds;
+    let runningTimer = setInterval(() => {
+      this.setState({
+        timerId: runningTimer
+      })
+      
+      minutes = Math.floor(time / 60);
+      seconds = time - minutes * 60;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+      this.setState({
+        timeRemaining: `${minutes}:${seconds}`
+      })
+      if (time <= 0) {
+        if (this.state.sessionType === "Work") {
+          this.setState({
+            sessionType: "Break",
+            timerOn: false
+          })
+          clearInterval(this.state.timerId);
+          this.startTimer(this.state.breakLength);
+        } else {
+          this.setState({
+            sessionType: "Work",
+            timerOn: false
+          })
+          clearInterval(this.state.timerId);
+          this.startTimer(this.state.sessionLength);
+        }
       }
-    }, 10);
-  };
+      time = time - 1;
+    }, 1000);
+  }
 
   stopTimer = () => {
-    clearInterval(this.timer);
+    clearInterval(this.state.timerId);
     this.setState({ timerOn: false });
   };
 
@@ -101,12 +108,13 @@ class App extends React.Component {
     this.setState({
       sessionLength: 25,
       breakLength: 5,
-      timerTime: 0
+      sessionType: "Work",
+      timeRemaining: "25:00",
+      timerId: 0
     });
   };
 
   render() {
-
     return (
       <div>
         <h1>Pomodoro Timer</h1>
@@ -118,7 +126,6 @@ class App extends React.Component {
           timerTime={this.state.timerTime}
           handleClick={this.handleClick}
           handleTimer={this.handleTimer}
-          setTimer={this.setTimer}
         />
         <ReactFCCtest />
       </div>
