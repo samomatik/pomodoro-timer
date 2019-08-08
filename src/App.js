@@ -38,34 +38,34 @@ class App extends React.Component {
   }
 
   handleClick(event) {
-    switch (event.target.id) {
-      case 'break-decrement':
-        this.setState(state => ({
-          breakLength: state.breakLength <= 1 ? state.breakLength : state.breakLength - 1
-        }));
-        break;
-      case 'break-increment':
-        this.setState(state => ({
-          breakLength: state.breakLength >= 60 ? state.breakLength : state.breakLength + 1
-        }));
-        break;
-      case 'session-decrement':
-        this.setState(state => ({
-          sessionLength: state.sessionLength <= 1 ? state.sessionLength : state.sessionLength - 1,
-          timer: state.sessionLength <=1 ? this.state.sessionLength * 60 : (this.state.sessionLength - 1) * 60
-        }), function stateUpdateComplete() {
-          this.clockify(this.state.timer)
-        }.bind(this));
-        break;
-      case 'session-increment':
-        return this.setState(state => ({
-          sessionLength: state.sessionLength >= 60 ? state.sessionLength : state.sessionLength + 1,
-          timer: state.sessionLength >= 60 ? this.state.sessionLength * 60 : (this.state.sessionLength + 1) * 60
-        }), function stateUpdateComplete() {
-          this.clockify(this.state.timer)
-        }.bind(this));
-      default:
-        return;
+    if (!this.state.timerOn) {
+      switch (event.target.id) {
+        case 'break-decrement':
+          this.setState(state => ({
+            breakLength: state.breakLength <= 1 ? state.breakLength : state.breakLength - 1
+          }));
+          break;
+        case 'break-increment':
+          this.setState(state => ({
+            breakLength: state.breakLength >= 60 ? state.breakLength : state.breakLength + 1
+          }));
+          break;
+        case 'session-decrement':
+          this.setState(state => ({
+            sessionLength: state.sessionLength <= 1 ? state.sessionLength : state.sessionLength - 1
+          }), function stateUpdateComplete() {
+            this.updateTimer();
+          }.bind(this));
+          break;
+        case 'session-increment':
+          return this.setState(state => ({
+            sessionLength: state.sessionLength >= 60 ? state.sessionLength : state.sessionLength + 1
+          }), function stateUpdateComplete() {
+            this.updateTimer();
+          }.bind(this));
+        default:
+          return;
+      }
     }
   }
 
@@ -92,17 +92,18 @@ class App extends React.Component {
   }
 
   startTimer = () => {
+    
     this.setState({
-      timerOn: true
+      timerOn: true,
     });
-    let time = this.state.timer - 1;
+    let time = this.state.timer;
+    time = time - 1;
     let runningTimer = setInterval(() => {
+      this.clockify(time);
       this.setState({
         timerId: runningTimer
       })
-      
-      this.clockify(time)
-      
+
       if (time <= 0) {
         if (this.state.sessionType === "Work") {
           this.setState(state => ({
