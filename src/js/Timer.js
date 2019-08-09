@@ -36,6 +36,7 @@ class Timer extends React.Component {
                         <button onClick={this.props.handleClick}><i id="session-decrement" className="fa fa-arrow-circle-o-down"></i></button>
                     </div>
                 </div>
+                
             </div>
         )
     }

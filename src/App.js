@@ -11,7 +11,7 @@ class App extends React.Component {
       sessionLength: 25,
       sessionType: 'Work',
       timeRemaining: '00:00',
-      timerId: 0,
+      timerId: '',
       timerOn: false,
       timer: 0
     }
@@ -97,19 +97,21 @@ class App extends React.Component {
       timerOn: true,
     });
     let time = this.state.timer;
+    
     time = time - 1;
     let runningTimer = setInterval(() => {
       this.clockify(time);
       this.setState({
         timerId: runningTimer
       })
-
+      
       if (time <= 0) {
+        this.audioBeep.play();
         if (this.state.sessionType === "Work") {
           this.setState(state => ({
             sessionType: "Break",
             timerOn: false,
-            timer: state.breakLength * 60
+            timer: state.breakLength * 60 + 1
           }));
           clearInterval(this.state.timerId);
           this.startTimer();
@@ -117,7 +119,7 @@ class App extends React.Component {
           this.setState(state => ({
             sessionType: "Work",
             timerOn: false,
-            timer: state.sessionLength * 60
+            timer: state.sessionLength * 60 + 1
           }));
           clearInterval(this.state.timerId);
           this.startTimer();
@@ -137,6 +139,8 @@ class App extends React.Component {
 
   resetTimer = () => {
     this.stopTimer();
+    this.audioBeep.pause();
+    this.audioBeep.currentTime = 0;
     this.setState({
       sessionLength: 25,
       breakLength: 5,
@@ -161,6 +165,9 @@ class App extends React.Component {
           handleClick={this.handleClick}
           handleTimer={this.handleTimer}
         />
+        <audio id="beep" preload="auto"
+          src="https://goo.gl/65cBl1"
+          ref={(audio) => { this.audioBeep = audio; }} />
         <ReactFCCtest />
       </div>
     )
