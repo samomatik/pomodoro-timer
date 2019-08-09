@@ -7,11 +7,11 @@ class Timer extends React.Component {
                 <div className="timer">
                     <div>
                         <p id="break-label">Break Length</p>
-                        <p id="break-length">{this.props.breakLength}</p>
+                        <p id="break-length" class="strong">{this.props.breakLength}</p>
                     </div>
                     <div>
                         <p id="session-label">Session Length</p>
-                        <p id="session-length">{this.props.sessionLength}</p>
+                        <p id="session-length" class="strong">{this.props.sessionLength}</p>
                     </div>
                 </div>
 
@@ -36,7 +36,6 @@ class Timer extends React.Component {
                         <button onClick={this.props.handleClick}><i id="session-decrement" className="fa fa-arrow-circle-o-down"></i></button>
                     </div>
                 </div>
-                
             </div>
         )
     }

@@ -13,8 +13,6 @@ body {
 }
 
 .container {
-    width: 700px;
-    background: #999;
     text-align: center;
     border-radius: 5px;
 }
@@ -27,7 +25,7 @@ body {
 }
 
 .timer div {
-    padding: 1rem 4rem;
+    margin: 2rem;
 }
 
 .controls {
@@ -38,15 +36,19 @@ body {
 }
 
 .controls div {
-    padding: 1rem 2rem;
+    margin: 1rem 2rem;
 }
 
 .controls i {
     font-size: 2rem;
-    padding: 1rem;
+    margin: 1rem;
 }
 
 .clock {
     font-size: 2rem;
+    font-weight: 500;
+}
+
+.strong {
     font-weight: 500;
 }
