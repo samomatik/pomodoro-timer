@@ -1,6 +1,6 @@
 # Pomodoro Timer
 
-Built using React
+Pomodoro Timer built using React for the Free Code Camp Front End Specialisation.
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
